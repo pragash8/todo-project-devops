@@ -1,0 +1,48 @@
+## running postgres, redis and elastic
+
+### running postgres container : todo-postgres
+
+`$ docker run --network todo-net --name todo-postgres -p 5432:5432 -e POSTGRES_USER=todo -e POSTGES_PASSWORD=todo1234 -e POSTGRES_DB=todo -d postgres:11.2`
+
+### running elastic search container : todo-elastic
+
+`$ docker run --network todo-net --name todo-elastic -d -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" elasticsearch:6.6.1`
+
+### running redis container: todo-elastic
+
+`$ docker run --network todo-net --name todo-redis -d -p 6379:6379 redis:5.0.3`
+
+## building images
+
+### build todo-api
+
+`$ docker build . -f Dockerfile.dev -t todo-api:1.0`
+
+### build todo-view
+
+`$ docker build . -f Dockerfile.dev -t todo-view:1.0`
+
+### build todo-proxy
+
+`$ docker build . -f Dockerfile.dev -t todo-proxy:1.0`
+
+## running containers
+
+### todo-api container running
+
+```
+$ docker run --name todo-api --network todo-net -it -v /app/node_modules -p 3000:3000 -e POSTGRES_HOST=todo-postgres -e POSTGRES_PORT=5432 -e POSTGRES_DATABASE=todo -e POSTGRES_USER=todo -e POSTGRES_PASSWORD=todo1234 -e REDIS_HOST=todo-redis -e REDIS_PORT=6379 -e ELASTICSEARCH_HOST=todo-elastic -e ELASTICSEARCH_PORT=9200 todo-api:1.0
+```
+
+### todo-view container running
+
+```
+$ docker run --name todo-view --network todo-net -it -v ${PWD}:/usr/src/app -v /usr/src/app/node_modules -p 4200:4200 todo-view:1.0
+```
+
+### todo-proxy container running
+
+```
+$ docker run --name todo-proxy --network todo-net -it -p 8080:80 todo-proxy:1.0
+
+```
