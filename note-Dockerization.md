@@ -1,3 +1,7 @@
+#
+
+---
+
 ## running postgres, redis and elastic
 
 ### running postgres container : todo-postgres
@@ -12,6 +16,8 @@
 
 `$ docker run --network todo-net --name todo-redis -d -p 6379:6379 redis:5.0.3`
 
+---
+
 ## building images
 
 ### build todo-api
@@ -25,6 +31,8 @@
 ### build todo-proxy
 
 `$ docker build . -f Dockerfile.dev -t todo-proxy:1.0`
+
+---
 
 ## running containers
 
