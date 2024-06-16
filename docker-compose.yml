@@ -20,6 +20,8 @@ services:
       - POSTGRES_USER=todo
       - POSTGRES_PASSWORD=todo1234
       - POSTGRES_DB=todo
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
 
   todo-elastic:
     container_name: todo-elastic
@@ -29,6 +31,8 @@ services:
       - 9300:9300
     environment:
       - discovery.type=single-node
+    volumes:
+      - elastic-data:/usr/share/elasticsearch/data
 
   todo-api:
     container_name: todo-api
@@ -81,3 +85,7 @@ services:
     depends_on:
       - todo-api
       - todo-view
+
+volumes:
+  postgres-data:
+  elastic-data:
